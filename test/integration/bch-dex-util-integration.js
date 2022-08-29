@@ -24,13 +24,13 @@ describe('#bch-dex-util.js', () => {
 
   describe('#getEntryFromP2wdb', async () => {
     it('should get an entry from the P2WDB', async () => {
-      const cid = 'zdpuB1JpvAb6t1Zrj7N7JVg3WTQ3ZEfoZ43nV6cWwLgNpB2gy'
+      const cid = 'zdpuAv1tCSRBrWcG9oisXTMD5mKCUHqivu1StSu18Dexcw87B'
 
       const result = await uut.getEntryFromP2wdb(cid)
       // console.log('result: ', result)
 
-      assert.property(result, 'isValid')
-      assert.property(result, 'value')
+      assert.property(result, 'appId')
+      assert.property(result, 'data')
     })
   })
 

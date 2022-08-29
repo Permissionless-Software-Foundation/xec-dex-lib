@@ -24,6 +24,10 @@ class BchDexLib {
       throw new Error('Instance of p2wdb must be passed as wallet property when instantiating the bch-dex-lib library.')
     }
     this.p2wdbRead = localConfig.p2wdbRead
+    if (!localConfig.p2wdbWrite) {
+      throw new Error('Instance of p2wdb Write must be passed as p2wdbWrite property when instantiating the bch-dex-lib library.')
+    }
+    this.p2wdbWrite = localConfig.p2wdbWrite
 
     const depenencies = {
       wallet: this.wallet,
