@@ -37,6 +37,30 @@ describe('#bch-dex-util.js', () => {
 
   afterEach(() => sandbox.restore())
 
+  describe('#constructor', () => {
+    it('should throw error if instance of minimal-slp-wallet is not passed', () => {
+      try {
+        uut = new BchDexUtil({})
+
+        assert.fail('Unexpected code path')
+      } catch (err) {
+        assert.include(err.message, 'Instance of minimal-slp-wallet must be passed as wallet property when instantiating bch-dex-util library.')
+      }
+    })
+
+    it('should throw error if instance of p2wdb Read lib is not passed', async () => {
+      try {
+        const wallet = new BchWallet(undefined, { interface: 'consumer-api' })
+        await wallet.walletInfoPromise
+        uut = new BchDexUtil({ wallet })
+
+        assert.fail('Unexpected code path')
+      } catch (err) {
+        assert.include(err.message, 'Instance of p2wdb Read must be passed as p2wdbRead property when instantiating bch-dex-util library.')
+      }
+    })
+  })
+
   describe('#getEntryFromP2wdb', async () => {
     it('should get an entry from the P2WDB', async () => {
       // Mock dependencies
@@ -49,6 +73,21 @@ describe('#bch-dex-util.js', () => {
 
       assert.property(result, 'isValid')
       assert.property(result, 'value')
+    })
+  })
+
+  describe('#validateUtxo', () => {
+    it('should return true on valid UTXO', async () => {
+      // Mock dependencies
+      sandbox.stub(uut.wallet, 'utxoIsValid').resolves(true)
+
+      const txHash = 'b94e1ff82eb5781f98296f0af2488ff06202f12ee92b0175963b8dba688d1b40'
+      const txPos = 0
+
+      const result = await uut.validateUtxo(txHash, txPos)
+      // console.log('result: ', result)
+
+      assert.equal(result, true)
     })
   })
 })

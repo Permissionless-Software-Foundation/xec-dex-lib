@@ -33,4 +33,16 @@ describe('#bch-dex-util.js', () => {
       assert.property(result, 'value')
     })
   })
+
+  describe('#validateUtxo', () => {
+    it('should return true for an unspent UTXO', async () => {
+      const txHash = 'b94e1ff82eb5781f98296f0af2488ff06202f12ee92b0175963b8dba688d1b40'
+      const txPos = 0
+
+      const result = await uut.validateUtxo(txHash, txPos)
+      // console.log('result: ', result)
+
+      assert.equal(result, true)
+    })
+  })
 })
