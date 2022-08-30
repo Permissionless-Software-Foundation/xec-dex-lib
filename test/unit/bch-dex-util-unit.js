@@ -19,15 +19,13 @@ let uut
 describe('#bch-dex-util.js', () => {
   let sandbox, mockData
 
-  before(async () => {
+  beforeEach(async () => {
     const wallet = new BchWallet(undefined, { interface: 'consumer-api' })
     await wallet.walletInfoPromise
     const p2wdbRead = new Read()
 
     uut = new BchDexUtil({ wallet, p2wdbRead })
-  })
 
-  beforeEach(() => {
     // Restore the sandbox before each test.
     sandbox = sinon.createSandbox()
 
@@ -71,8 +69,24 @@ describe('#bch-dex-util.js', () => {
       const result = await uut.getEntryFromP2wdb(cid)
       // console.log('result: ', result)
 
-      assert.property(result, 'isValid')
-      assert.property(result, 'value')
+      assert.property(result, 'appId')
+      assert.property(result, 'data')
+    })
+
+    it('should handle data that is already parsed', async () => {
+      // Force desired code path
+      mockData.mockP2wdbRead.value.data = JSON.parse(mockData.mockP2wdbRead.value.data)
+
+      // Mock dependencies
+      sandbox.stub(uut.p2wdbRead, 'getByHash').resolves(mockData.mockP2wdbRead)
+
+      const cid = 'zdpuB1JpvAb6t1Zrj7N7JVg3WTQ3ZEfoZ43nV6cWwLgNpB2gy'
+
+      const result = await uut.getEntryFromP2wdb(cid)
+      // console.log('result: ', result)
+
+      assert.property(result, 'appId')
+      assert.property(result, 'data')
     })
   })
 
@@ -88,6 +102,29 @@ describe('#bch-dex-util.js', () => {
       // console.log('result: ', result)
 
       assert.equal(result, true)
+    })
+  })
+
+  describe('#getKeyPair', () => {
+    it('should return an object with a key pair', async () => {
+      const result = await uut.getKeyPair()
+      // console.log('result: ', result)
+
+      assert.property(result, 'cashAddress')
+      assert.property(result, 'wif')
+      assert.property(result, 'hdIndex')
+    })
+
+    it('should throw an error if wallet does not have a mnemonic', async () => {
+      try {
+        uut.wallet.walletInfo.mnemonic = ''
+
+        await uut.getKeyPair()
+
+        assert.fail('Unexpected code path')
+      } catch (err) {
+        assert.include(err.message, 'Wallet does not have a mnemonic. Can not generate a new key pair.')
+      }
     })
   })
 })

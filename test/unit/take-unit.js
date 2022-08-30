@@ -94,5 +94,106 @@ describe('#take.js', () => {
       assert.equal(result.hasEnoughFunds, true)
       assert.include(result.bchAddr, 'bitcoincash:')
     })
+
+    it('should throw an error if wallet has no BCH or PSF tokens', async () => {
+      try {
+        // Force code path
+        sandbox.stub(uut.p2wdbWrite, 'checkForSufficientFunds').resolves({
+          hasEnoughPsf: false,
+          hasEnoughBch: false,
+          bchAddr: null
+        })
+
+        await uut.ensureFunds(mockData.offerData01)
+
+        assert.fail('Unexpected result')
+      } catch (err) {
+        assert.include(err.message, 'Wallet does not have enough BCH to write to the P2WDB.')
+      }
+    })
+
+    it('should throw an error if satsNeeded can not be calculated', async () => {
+      try {
+        // Force code path
+        sandbox.stub(uut.p2wdbWrite, 'checkForSufficientFunds').resolves({
+          hasEnoughPsf: false,
+          hasEnoughBch: 0.00011074,
+          bchAddr: 'bitcoincash:qpckjpvxwxmggdmqj35jkdhxqks9ku0q5gr7nc9yhf'
+        })
+        sandbox.stub(uut.wallet, 'getBalance').resolves(163456)
+
+        // Force code path
+        mockData.offerData01.data.numTokens = 'a'
+
+        await uut.ensureFunds(mockData.offerData01)
+
+        assert.fail('Unexpected result')
+      } catch (err) {
+        assert.include(err.message, 'Could not calculate sats needed!')
+      }
+    })
+
+    it('should throw an error if wallet does not have enough BCH', async () => {
+      try {
+        // Force code path
+        sandbox.stub(uut.p2wdbWrite, 'checkForSufficientFunds').resolves({
+          hasEnoughPsf: false,
+          hasEnoughBch: 0.00011074,
+          bchAddr: 'bitcoincash:qpckjpvxwxmggdmqj35jkdhxqks9ku0q5gr7nc9yhf'
+        })
+        sandbox.stub(uut.wallet, 'getBalance').resolves(9000)
+
+        await uut.ensureFunds(mockData.offerData01)
+
+        assert.fail('Unexpected result')
+      } catch (err) {
+        assert.include(err.message, 'Wallet does not control enough BCH to purchase the tokens.')
+      }
+    })
+
+    it('should throw an error for a "buy" Offer', async () => {
+      try {
+        // Force code path
+        sandbox.stub(uut.p2wdbWrite, 'checkForSufficientFunds').resolves({
+          hasEnoughPsf: false,
+          hasEnoughBch: 0.00011074,
+          bchAddr: 'bitcoincash:qpckjpvxwxmggdmqj35jkdhxqks9ku0q5gr7nc9yhf'
+        })
+        sandbox.stub(uut.wallet, 'getBalance').resolves(160000)
+
+        // Force code path
+        mockData.offerData01.data.buyOrSell = 'buy'
+
+        await uut.ensureFunds(mockData.offerData01)
+
+        assert.fail('Unexpected result')
+      } catch (err) {
+        assert.include(err.message, 'Buy offers are not supported yet.')
+      }
+    })
+  })
+
+  describe('#moveBch', () => {
+    it('should move BCH to the second HD address by default (index 1)', async () => {
+      // Mock dependencies
+      sandbox.stub(uut.wallet, 'getUtxos').resolves()
+      sandbox.stub(uut.wallet, 'send').resolves('fake-txid')
+
+      const result = await uut.moveBch(mockData.offerData01)
+
+      assert.property(result, 'txid')
+    })
+
+    it('should throw an error if satsToMove can not be calculated correctly', async () => {
+      try {
+        mockData.offerData01.data.numTokens = 'a'
+
+        await uut.moveBch(mockData.offerData01)
+
+        assert.fail('Unexpected result')
+      } catch (err) {
+        assert.include(err.message, 'Could not calculate the amount of BCH to generate counter offer')
+      }
+    })
   })
 })
