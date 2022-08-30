@@ -196,4 +196,78 @@ describe('#take.js', () => {
       }
     })
   })
+
+  describe('#generatePartialTx', () => {
+    it('should generate a partial transaction for Type 1 token (fungible)', async () => {
+      // Mock dependencies
+      sandbox.stub(uut.wallet, 'getTxData').resolves(mockData.txData01)
+
+      const result = await uut.generatePartialTx(mockData.offerData02, mockData.counterOfferUtxo01)
+
+      assert.include(result, '020000000')
+    })
+
+    it('should generate a partial transaction for Type 65 token (NFT)', async () => {
+      // Mock dependencies
+      sandbox.stub(uut.wallet, 'getTxData').resolves(mockData.txData01)
+
+      // Force desired code path
+      mockData.offerData02.data.tokenType = 65
+
+      const result = await uut.generatePartialTx(mockData.offerData02, mockData.counterOfferUtxo01)
+
+      assert.include(result, '020000000')
+    })
+
+    it('should throw an error for unknown token types', async () => {
+      try {
+        // Mock dependencies
+        sandbox.stub(uut.wallet, 'getTxData').resolves(mockData.txData01)
+
+        // Force desired code path
+        mockData.offerData02.data.tokenType = 14
+
+        await uut.generatePartialTx(mockData.offerData02, mockData.counterOfferUtxo01)
+
+        assert.fail('Unexpected result')
+      } catch (err) {
+        assert.include(err.message, 'Unknown token type of')
+      }
+    })
+
+    it('should throw an error if token change is generated', async () => {
+      try {
+        // Mock dependencies
+        sandbox.stub(uut.wallet, 'getTxData').resolves(mockData.txData01)
+
+        // Force desired code path
+        sandbox.stub(uut.wallet.bchjs.SLP.TokenType1, 'generateSendOpReturn').returns({
+          script: Buffer.from('test'),
+          outputs: 2
+        })
+
+        await uut.generatePartialTx(mockData.offerData02, mockData.counterOfferUtxo01)
+
+        assert.fail('Unexpected result')
+      } catch (err) {
+        assert.include(err.message, 'Partial purchase of Offers is not yet supported')
+      }
+    })
+
+    it('should throw an error if needed sats can not be calculated', async () => {
+      try {
+        // Mock dependencies
+        sandbox.stub(uut.wallet, 'getTxData').resolves(mockData.txData01)
+
+        // Force desired code path
+        mockData.offerData02.data.rateInBaseUnit = 'a'
+
+        await uut.generatePartialTx(mockData.offerData02, mockData.counterOfferUtxo01)
+
+        assert.fail('Unexpected result')
+      } catch (err) {
+        assert.include(err.message, 'Can not calculate needed sats')
+      }
+    })
+  })
 })
