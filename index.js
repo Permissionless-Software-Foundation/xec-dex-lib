@@ -1,26 +1,41 @@
 /*
-  An npm JavaScript library for front end web apps. Implements a minimal
-  Bitcoin Cash wallet.
+  Top level library file. This aggregates the other libraries into a single
+  library file.
 */
-
-/* eslint-disable no-async-promise-executor */
 
 'use strict'
 
-const BCHJS = require('@psf/bch-js')
+// Local libraries
+const Take = require('./lib/take')
 
-const Util = require('./lib/util')
-const util = new Util()
+// const BCHJS = require('@psf/bch-js')
 
-let _this // local global for 'this'.
+// const Util = require('./lib/bch-dex-util')
+// const util = new Util()
 
-class BoilplateLib {
-  constructor () {
-    _this = this
+class BchDexLib {
+  constructor (localConfig = {}) {
+    // Dependency injection
+    if (!localConfig.wallet) {
+      throw new Error('Instance of minimal-slp-wallet must be passed as wallet property when instantiating the bch-dex-lib library.')
+    }
+    this.wallet = localConfig.wallet
+    if (!localConfig.p2wdbRead) {
+      throw new Error('Instance of p2wdb must be passed as wallet property when instantiating the bch-dex-lib library.')
+    }
+    this.p2wdbRead = localConfig.p2wdbRead
+    if (!localConfig.p2wdbWrite) {
+      throw new Error('Instance of p2wdb Write must be passed as p2wdbWrite property when instantiating the bch-dex-lib library.')
+    }
+    this.p2wdbWrite = localConfig.p2wdbWrite
 
-    _this.bchjs = new BCHJS()
-    _this.util = util
+    const depenencies = {
+      wallet: this.wallet,
+      p2wdbRead: this.p2wdbRead
+    }
+
+    this.take = new Take(depenencies)
   }
 }
 
-module.exports = BoilplateLib
+module.exports = BchDexLib
