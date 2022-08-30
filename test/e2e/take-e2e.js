@@ -78,7 +78,11 @@ describe('#take.js', () => {
 
   describe('#takeOffer', () => {
     it('should create a Counter Offer', async () => {
+      // Customize the two variables below for your own test. The mnemonic
+      // should control about $0.20 USD of BCH. The p2wdbHash should be for a
+      // valid Offer in the market.
       const mnemonic = 'gaze result fortune pulse jeans lucky tape build maximum puppy urban size'
+      const p2wdbHash = 'zdpuAvWMYm7bfHTxbNwsWYmrkK3cnhtH2MzQ7QS74uYbkM3ja'
 
       const wallet = new BchWallet(mnemonic, { interface: 'consumer-api' })
       await wallet.walletInfoPromise
@@ -87,7 +91,6 @@ describe('#take.js', () => {
 
       const take = new Take({ wallet, p2wdbRead, p2wdbWrite })
 
-      const p2wdbHash = 'zdpuAzhdXbUp2W9d64ezxFyPExFJMdiZkjiJAu3ADPt8ZbicF'
       const result = await take.takeOffer(p2wdbHash)
       console.log('result: ', result)
     })
