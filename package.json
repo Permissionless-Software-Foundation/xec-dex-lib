@@ -2,14 +2,15 @@
   "name": "bch-dex-lib",
   "version": "1.0.0",
   "description": "An npm JavaScript library for browser and node.js that incorporates the SWaP protocol used by bch-dex.",
-  "main": "index.js",
+  "main": "dist/bch-dex-lib.min.js",
   "scripts": {
     "start": "node index.js",
     "test": "npm run lint && TEST=unit nyc mocha test/unit/",
     "test:integration": "mocha --timeout 25000 test/integration/",
     "lint": "standard --env mocha --fix",
     "docs": "./node_modules/.bin/apidoc -i src/ -o docs",
-    "coverage:report": "nyc --reporter=html mocha test/unit/ --exit"
+    "coverage:report": "nyc --reporter=html mocha test/unit/ --exit",
+    "build": "browserify index.js -p tinyify --s BchDexLib -o dist/bch-dex-lib.min.js"
   },
   "keywords": [
     "bitcoin",
@@ -35,6 +36,7 @@
     "@psf/bch-js": "6.4.5"
   },
   "devDependencies": {
+    "browserify": "17.0.0",
     "apidoc": "0.52.0",
     "chai": "4.3.6",
     "husky": "8.0.1",
@@ -45,7 +47,8 @@
     "p2wdb": "1.6.1",
     "semantic-release": "19.0.5",
     "sinon": "14.0.0",
-    "standard": "17.0.0"
+    "standard": "17.0.0",
+    "tinyify": "3.0.0"
   },
   "release": {
     "publish": [
