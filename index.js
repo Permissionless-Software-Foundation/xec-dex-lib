@@ -31,7 +31,8 @@ class BchDexLib {
 
     const depenencies = {
       wallet: this.wallet,
-      p2wdbRead: this.p2wdbRead
+      p2wdbRead: this.p2wdbRead,
+      p2wdbWrite: this.p2wdbWrite
     }
 
     this.take = new Take(depenencies)
