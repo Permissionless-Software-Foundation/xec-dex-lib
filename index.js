@@ -7,6 +7,7 @@
 
 // Local libraries
 const Take = require('./lib/take')
+const Flag = require('./lib/flag')
 
 // const BCHJS = require('@psf/bch-js')
 
@@ -16,10 +17,10 @@ const Take = require('./lib/take')
 class BchDexLib {
   constructor (localConfig = {}) {
     // Dependency injection
-    if (!localConfig.wallet) {
+    if (!localConfig.bchWallet) {
       throw new Error('Instance of minimal-slp-wallet must be passed as wallet property when instantiating the bch-dex-lib library.')
     }
-    this.wallet = localConfig.wallet
+    this.bchWallet = localConfig.bchWallet
     if (!localConfig.p2wdbRead) {
       throw new Error('Instance of p2wdb must be passed as wallet property when instantiating the bch-dex-lib library.')
     }
@@ -30,12 +31,14 @@ class BchDexLib {
     this.p2wdbWrite = localConfig.p2wdbWrite
 
     const depenencies = {
-      wallet: this.wallet,
+      bchWallet: this.bchWallet,
       p2wdbRead: this.p2wdbRead,
       p2wdbWrite: this.p2wdbWrite
     }
 
+    // Encapsulate dependencies
     this.take = new Take(depenencies)
+    this.flag = new Flag(depenencies)
   }
 }
 

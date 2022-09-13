@@ -20,11 +20,11 @@ describe('#bch-dex-util.js', () => {
   let sandbox, mockData
 
   beforeEach(async () => {
-    const wallet = new BchWallet(undefined, { interface: 'consumer-api' })
-    await wallet.walletInfoPromise
+    const bchWallet = new BchWallet(undefined, { interface: 'consumer-api' })
+    await bchWallet.walletInfoPromise
     const p2wdbRead = new Read()
 
-    uut = new BchDexUtil({ wallet, p2wdbRead })
+    uut = new BchDexUtil({ bchWallet, p2wdbRead })
 
     // Restore the sandbox before each test.
     sandbox = sinon.createSandbox()
@@ -48,9 +48,9 @@ describe('#bch-dex-util.js', () => {
 
     it('should throw error if instance of p2wdb Read lib is not passed', async () => {
       try {
-        const wallet = new BchWallet(undefined, { interface: 'consumer-api' })
-        await wallet.walletInfoPromise
-        uut = new BchDexUtil({ wallet })
+        const bchWallet = new BchWallet(undefined, { interface: 'consumer-api' })
+        await bchWallet.walletInfoPromise
+        uut = new BchDexUtil({ bchWallet })
 
         assert.fail('Unexpected code path')
       } catch (err) {
@@ -93,7 +93,7 @@ describe('#bch-dex-util.js', () => {
   describe('#validateUtxo', () => {
     it('should return true on valid UTXO', async () => {
       // Mock dependencies
-      sandbox.stub(uut.wallet, 'utxoIsValid').resolves(true)
+      sandbox.stub(uut.bchWallet, 'utxoIsValid').resolves(true)
 
       const txHash = 'b94e1ff82eb5781f98296f0af2488ff06202f12ee92b0175963b8dba688d1b40'
       const txPos = 0
@@ -117,7 +117,7 @@ describe('#bch-dex-util.js', () => {
 
     it('should throw an error if wallet does not have a mnemonic', async () => {
       try {
-        uut.wallet.walletInfo.mnemonic = ''
+        uut.bchWallet.walletInfo.mnemonic = ''
 
         await uut.getKeyPair()
 
