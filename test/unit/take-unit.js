@@ -20,14 +20,14 @@ describe('#take.js', () => {
   let sandbox, mockData
 
   before(async () => {
-    const wallet = new BchWallet(undefined, { interface: 'consumer-api' })
-    await wallet.walletInfoPromise
+    const bchWallet = new BchWallet(undefined, { interface: 'consumer-api' })
+    await bchWallet.walletInfoPromise
     const p2wdbRead = new Read()
 
-    const wif = 'L1tcvcqa5PztqqDH4ZEcUmHA9aSHhTau5E2Zwp1xEK5CrKBrjP3m'
-    const p2wdbWrite = new Write({ wif, interface: 'consumer-api' })
+    // const wif = 'L1tcvcqa5PztqqDH4ZEcUmHA9aSHhTau5E2Zwp1xEK5CrKBrjP3m'
+    const p2wdbWrite = new Write({ bchWallet })
 
-    uut = new Take({ wallet, p2wdbRead, p2wdbWrite })
+    uut = new Take({ bchWallet, p2wdbRead, p2wdbWrite })
   })
 
   beforeEach(() => {
@@ -53,10 +53,10 @@ describe('#take.js', () => {
 
     it('should throw error if instance of p2wdb Read lib is not passed', async () => {
       try {
-        const wallet = new BchWallet(undefined, { interface: 'consumer-api' })
-        await wallet.walletInfoPromise
+        const bchWallet = new BchWallet(undefined, { interface: 'consumer-api' })
+        await bchWallet.walletInfoPromise
 
-        uut = new Take({ wallet })
+        uut = new Take({ bchWallet })
 
         assert.fail('Unexpected code path')
       } catch (err) {
@@ -66,11 +66,11 @@ describe('#take.js', () => {
 
     it('should throw error if instance of p2wdb Write lib is not passed', async () => {
       try {
-        const wallet = new BchWallet(undefined, { interface: 'consumer-api' })
-        await wallet.walletInfoPromise
+        const bchWallet = new BchWallet(undefined, { interface: 'consumer-api' })
+        await bchWallet.walletInfoPromise
         const p2wdbRead = new Read()
 
-        uut = new Take({ wallet, p2wdbRead })
+        uut = new Take({ bchWallet, p2wdbRead })
 
         assert.fail('Unexpected code path')
       } catch (err) {
@@ -87,7 +87,7 @@ describe('#take.js', () => {
         hasEnoughBch: 0.00011074,
         bchAddr: 'bitcoincash:qpckjpvxwxmggdmqj35jkdhxqks9ku0q5gr7nc9yhf'
       })
-      sandbox.stub(uut.wallet, 'getBalance').resolves(163456)
+      sandbox.stub(uut.bchWallet, 'getBalance').resolves(163456)
 
       const result = await uut.ensureFunds(mockData.offerData01)
 
@@ -120,7 +120,7 @@ describe('#take.js', () => {
           hasEnoughBch: 0.00011074,
           bchAddr: 'bitcoincash:qpckjpvxwxmggdmqj35jkdhxqks9ku0q5gr7nc9yhf'
         })
-        sandbox.stub(uut.wallet, 'getBalance').resolves(163456)
+        sandbox.stub(uut.bchWallet, 'getBalance').resolves(163456)
 
         // Force code path
         mockData.offerData01.data.numTokens = 'a'
@@ -141,7 +141,7 @@ describe('#take.js', () => {
           hasEnoughBch: 0.00011074,
           bchAddr: 'bitcoincash:qpckjpvxwxmggdmqj35jkdhxqks9ku0q5gr7nc9yhf'
         })
-        sandbox.stub(uut.wallet, 'getBalance').resolves(9000)
+        sandbox.stub(uut.bchWallet, 'getBalance').resolves(9000)
 
         await uut.ensureFunds(mockData.offerData01)
 
@@ -159,7 +159,7 @@ describe('#take.js', () => {
           hasEnoughBch: 0.00011074,
           bchAddr: 'bitcoincash:qpckjpvxwxmggdmqj35jkdhxqks9ku0q5gr7nc9yhf'
         })
-        sandbox.stub(uut.wallet, 'getBalance').resolves(160000)
+        sandbox.stub(uut.bchWallet, 'getBalance').resolves(160000)
 
         // Force code path
         mockData.offerData01.data.buyOrSell = 'buy'
@@ -176,8 +176,8 @@ describe('#take.js', () => {
   describe('#moveBch', () => {
     it('should move BCH to the second HD address by default (index 1)', async () => {
       // Mock dependencies
-      sandbox.stub(uut.wallet, 'getUtxos').resolves()
-      sandbox.stub(uut.wallet, 'send').resolves('fake-txid')
+      sandbox.stub(uut.bchWallet, 'getUtxos').resolves()
+      sandbox.stub(uut.bchWallet, 'send').resolves('fake-txid')
 
       const result = await uut.moveBch(mockData.offerData01)
 
@@ -200,7 +200,7 @@ describe('#take.js', () => {
   describe('#generatePartialTx', () => {
     it('should generate a partial transaction for Type 1 token (fungible)', async () => {
       // Mock dependencies
-      sandbox.stub(uut.wallet, 'getTxData').resolves(mockData.txData01)
+      sandbox.stub(uut.bchWallet, 'getTxData').resolves(mockData.txData01)
 
       const result = await uut.generatePartialTx(mockData.offerData02, mockData.counterOfferUtxo01)
 
@@ -209,7 +209,7 @@ describe('#take.js', () => {
 
     it('should generate a partial transaction for Type 65 token (NFT)', async () => {
       // Mock dependencies
-      sandbox.stub(uut.wallet, 'getTxData').resolves(mockData.txData01)
+      sandbox.stub(uut.bchWallet, 'getTxData').resolves(mockData.txData01)
 
       // Force desired code path
       mockData.offerData02.data.tokenType = 65
@@ -222,7 +222,7 @@ describe('#take.js', () => {
     it('should throw an error for unknown token types', async () => {
       try {
         // Mock dependencies
-        sandbox.stub(uut.wallet, 'getTxData').resolves(mockData.txData01)
+        sandbox.stub(uut.bchWallet, 'getTxData').resolves(mockData.txData01)
 
         // Force desired code path
         mockData.offerData02.data.tokenType = 14
@@ -238,10 +238,10 @@ describe('#take.js', () => {
     it('should throw an error if token change is generated', async () => {
       try {
         // Mock dependencies
-        sandbox.stub(uut.wallet, 'getTxData').resolves(mockData.txData01)
+        sandbox.stub(uut.bchWallet, 'getTxData').resolves(mockData.txData01)
 
         // Force desired code path
-        sandbox.stub(uut.wallet.bchjs.SLP.TokenType1, 'generateSendOpReturn').returns({
+        sandbox.stub(uut.bchWallet.bchjs.SLP.TokenType1, 'generateSendOpReturn').returns({
           script: Buffer.from('test'),
           outputs: 2
         })
@@ -257,7 +257,7 @@ describe('#take.js', () => {
     it('should throw an error if needed sats can not be calculated', async () => {
       try {
         // Mock dependencies
-        sandbox.stub(uut.wallet, 'getTxData').resolves(mockData.txData01)
+        sandbox.stub(uut.bchWallet, 'getTxData').resolves(mockData.txData01)
 
         // Force desired code path
         mockData.offerData02.data.rateInBaseUnit = 'a'
