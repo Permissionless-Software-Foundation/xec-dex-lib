@@ -202,7 +202,12 @@ describe('#take.js', () => {
       // Mock dependencies
       sandbox.stub(uut.bchWallet, 'getTxData').resolves(mockData.txData01)
 
-      const result = await uut.generatePartialTx(mockData.offerData02, mockData.counterOfferUtxo01)
+      const inObj = {
+        offerInfo: mockData.offerData02,
+        utxoInfo: mockData.counterOfferUtxo01
+      }
+
+      const result = await uut.generatePartialTx(inObj)
 
       assert.include(result, '020000000')
     })
@@ -214,7 +219,12 @@ describe('#take.js', () => {
       // Force desired code path
       mockData.offerData02.data.tokenType = 65
 
-      const result = await uut.generatePartialTx(mockData.offerData02, mockData.counterOfferUtxo01)
+      const inObj = {
+        offerInfo: mockData.offerData02,
+        utxoInfo: mockData.counterOfferUtxo01
+      }
+
+      const result = await uut.generatePartialTx(inObj)
 
       assert.include(result, '020000000')
     })
@@ -227,7 +237,12 @@ describe('#take.js', () => {
         // Force desired code path
         mockData.offerData02.data.tokenType = 14
 
-        await uut.generatePartialTx(mockData.offerData02, mockData.counterOfferUtxo01)
+        const inObj = {
+          offerInfo: mockData.offerData02,
+          utxoInfo: mockData.counterOfferUtxo01
+        }
+
+        await uut.generatePartialTx(inObj)
 
         assert.fail('Unexpected result')
       } catch (err) {
@@ -246,7 +261,12 @@ describe('#take.js', () => {
           outputs: 2
         })
 
-        await uut.generatePartialTx(mockData.offerData02, mockData.counterOfferUtxo01)
+        const inObj = {
+          offerInfo: mockData.offerData02,
+          utxoInfo: mockData.counterOfferUtxo01
+        }
+
+        await uut.generatePartialTx(inObj)
 
         assert.fail('Unexpected result')
       } catch (err) {
@@ -262,7 +282,12 @@ describe('#take.js', () => {
         // Force desired code path
         mockData.offerData02.data.rateInBaseUnit = 'a'
 
-        await uut.generatePartialTx(mockData.offerData02, mockData.counterOfferUtxo01)
+        const inObj = {
+          offerInfo: mockData.offerData02,
+          utxoInfo: mockData.counterOfferUtxo01
+        }
+
+        await uut.generatePartialTx(inObj)
 
         assert.fail('Unexpected result')
       } catch (err) {
