@@ -33,11 +33,11 @@
   },
   "repository": "Permissionless-Software-Foundation/bch-dex-lib",
   "dependencies": {
-    "@psf/bch-js": "6.4.5"
+    "@chris.troutner/retry-queue-commonjs": "1.0.5"
   },
   "devDependencies": {
-    "browserify": "17.0.0",
     "apidoc": "0.52.0",
+    "browserify": "17.0.0",
     "chai": "4.3.6",
     "husky": "8.0.1",
     "lodash.clonedeep": "4.5.0",

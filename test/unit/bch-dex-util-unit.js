@@ -98,7 +98,12 @@ describe('#bch-dex-util.js', () => {
       const txHash = 'b94e1ff82eb5781f98296f0af2488ff06202f12ee92b0175963b8dba688d1b40'
       const txPos = 0
 
-      const result = await uut.validateUtxo(txHash, txPos)
+      const utxo = {
+        tx_hash: txHash,
+        tx_pos: txPos
+      }
+
+      const result = await uut.validateUtxo(utxo)
       // console.log('result: ', result)
 
       assert.equal(result, true)
