@@ -33,7 +33,7 @@
   },
   "repository": "Permissionless-Software-Foundation/bch-dex-lib",
   "dependencies": {
-    "@chris.troutner/retry-queue-commonjs": "1.0.6"
+    "@chris.troutner/retry-queue-commonjs": "1.0.7"
   },
   "devDependencies": {
     "apidoc": "0.52.0",
