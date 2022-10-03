@@ -11,6 +11,7 @@ const { Read, Write } = require('p2wdb/index')
 
 // Mocking data libraries.
 const mockDataLib = require('./mocks/take-mocks')
+const offerMocks = require('./mocks/offer-mocks')
 
 // Unit under test
 const Take = require('../../lib/take')
@@ -293,6 +294,24 @@ describe('#take.js', () => {
       } catch (err) {
         assert.include(err.message, 'Can not calculate needed sats')
       }
+    })
+  })
+
+  describe('#uploadCounterOffer', () => {
+    it('should generate a Counter Offer and upload it to P2WDB', async () => {
+      // Mock dependencies and force desired code path
+      sandbox.stub(uut.p2wdbWrite.bchWallet, 'initialize').resolves()
+      sandbox.stub(uut.p2wdbWrite, 'postEntry').resolves('fake-hash')
+
+      const inObj = {
+        offerData: offerMocks.simpleNftOffer01,
+        partialHex: 'fake-hex',
+        offerCid: 'fake-cid'
+      }
+
+      const result = await uut.uploadCounterOffer(inObj)
+
+      assert.equal(result, 'fake-hash')
     })
   })
 })
