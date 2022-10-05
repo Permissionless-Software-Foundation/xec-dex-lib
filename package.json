@@ -2,7 +2,7 @@
   "name": "bch-dex-lib",
   "version": "1.0.0",
   "description": "An npm JavaScript library for browser and node.js that incorporates the SWaP protocol used by bch-dex.",
-  "main": "dist/bch-dex-lib.min.js",
+  "main": "index.js",
   "scripts": {
     "start": "node index.js",
     "test": "npm run lint && TEST=unit nyc mocha test/unit/",
@@ -33,7 +33,7 @@
   },
   "repository": "Permissionless-Software-Foundation/bch-dex-lib",
   "dependencies": {
-    "@chris.troutner/retry-queue-commonjs": "1.0.7"
+    "@chris.troutner/retry-queue-commonjs": "1.0.8"
   },
   "devDependencies": {
     "apidoc": "0.52.0",
@@ -61,6 +61,16 @@
   "husky": {
     "hooks": {
       "pre-commit": "npm run lint && npm run build"
+    }
+  },
+  "exports": {
+    ".": {
+      "import": {
+        "default": "./dist/bch-dex-lib.min.js"
+      },
+      "require": {
+        "default": "index.js"
+      }
     }
   }
 }
