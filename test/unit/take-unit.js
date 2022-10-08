@@ -6,8 +6,8 @@
 const assert = require('chai').assert
 const sinon = require('sinon')
 const cloneDeep = require('lodash.clonedeep')
-const BchWallet = require('minimal-slp-wallet/index')
-const { Read, Write } = require('p2wdb/index')
+const BchWallet = require('minimal-slp-wallet')
+const { Read, Write } = require('p2wdb')
 
 // Mocking data libraries.
 const mockDataLib = require('./mocks/take-mocks')

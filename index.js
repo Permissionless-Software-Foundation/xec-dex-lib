@@ -3,11 +3,10 @@
   library file.
 */
 
-'use strict'
-
 // Local libraries
-const Take = require('./lib/take')
-const Flag = require('./lib/flag')
+const Take = require('./lib/take.js')
+const Flag = require('./lib/flag.js')
+const TokenData = require('./lib/token-data.js')
 
 // const BCHJS = require('@psf/bch-js')
 
@@ -39,6 +38,7 @@ class BchDexLib {
     // Encapsulate dependencies
     this.take = new Take(depenencies)
     this.flag = new Flag(depenencies)
+    this.tokenData = new TokenData(depenencies)
   }
 }
 
