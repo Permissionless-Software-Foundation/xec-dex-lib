@@ -1,7 +1,7 @@
 {
-  "name": "bch-dex-lib",
+  "name": "xec-dex-lib",
   "version": "1.0.0",
-  "description": "An npm JavaScript library for browser and node.js that incorporates the SWaP protocol used by bch-dex.",
+  "description": "An npm JavaScript library for browser and node.js that incorporates the SWaP protocol used by xec-dex.",
   "main": "index.js",
   "scripts": {
     "start": "node index.js",
@@ -28,10 +28,10 @@
   "author": "Chris Troutner <chris.troutner@gmail.com>",
   "license": "MIT",
   "apidoc": {
-    "title": "bch-dex-lib",
+    "title": "xec-dex-lib",
     "url": "localhost:5000"
   },
-  "repository": "Permissionless-Software-Foundation/bch-dex-lib",
+  "repository": "Permissionless-Software-Foundation/xec-dex-lib",
   "dependencies": {
     "@chris.troutner/retry-queue-commonjs": "1.0.8"
   },
@@ -41,7 +41,7 @@
     "chai": "4.3.6",
     "husky": "8.0.1",
     "lodash.clonedeep": "4.5.0",
-    "minimal-slp-wallet": "5.4.3",
+    "minimal-ecash-wallet": "1.1.5",
     "mocha": "10.0.0",
     "nyc": "15.1.0",
     "p2wdb": "2.2.7",

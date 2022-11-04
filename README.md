@@ -1,14 +1,14 @@
-# bch-dex-lib
+# xec-dex-lib
 
-This is a library for use in both browser and node.js JavaScript applications. It incorporates the basic [SWaP protocol](https://github.com/vinarmani/swap-protocol/blob/master/swap-protocol-spec.md) used by [bch-dex](https://github.com/Permissionless-Software-Foundation/bch-dex).
+This is a library for use in both browser and node.js JavaScript applications. It incorporates the basic [SWaP protocol](https://github.com/vinarmani/swap-protocol/blob/master/swap-protocol-spec.md) used by [xec-dex](https://github.com/Permissionless-Software-Foundation/xec-dex).
 
-The purpose of this library is build a web and Android app that can let *Takers* purchase tokens using the bch-dex protocol. *Makers* still still need to run the [bch-dex](https://github.com/Permissionless-Software-Foundation/bch-dex) back end to make Offers and accept Counter-Offers. But an app using this library allows Takers to issue a Counter Offer without needing to run back end software.
+The purpose of this library is build a web and Android app that can let *Takers* purchase tokens using the xec-dex protocol. *Makers* still still need to run the [xec-dex](https://github.com/Permissionless-Software-Foundation/xec-dex) back end to make Offers and accept Counter-Offers. But an app using this library allows Takers to issue a Counter Offer without needing to run back end software.
 
-This library depends on [minimal-slp-wallet](https://www.npmjs.com/package/minimal-slp-wallet) and [p2wdb](https://www.npmjs.com/package/p2wdb). Both of these libraries must be instantiated and passed in as arguments when instantiating this library.
+This library depends on [minimal-ecash-wallet](https://www.npmjs.com/package/minimal-ecash-wallet) and [p2wdb](https://www.npmjs.com/package/p2wdb). Both of these libraries must be instantiated and passed in as arguments when instantiating this library.
 
 ## Installation
 
-`npm install --save-exact bch-dex-lib`
+`npm install --save-exact xec-dex-lib`
 
 ## Usage
 
@@ -16,8 +16,8 @@ This library depends on [minimal-slp-wallet](https://www.npmjs.com/package/minim
 async function start() {
   try {
     // Global npm libraries
-    const BchWallet = require('minimal-slp-wallet/index')
-    const { Read, Write } = require('p2wdb/index')
+    const XecWallet = require('minimal-ecash-wallet')
+    const { Read, Write } = require('p2wdb')
 
     // Customize the two variables below for your own test. The mnemonic
     // should control about $0.20 USD of BCH. The p2wdbHash should be for a
@@ -26,7 +26,7 @@ async function start() {
     const p2wdbHash = 'zdpuAvWMYm7bfHTxbNwsWYmrkK3cnhtH2MzQ7QS74uYbkM3ja'
 
     // Instantiate dependencies
-    const wallet = new BchWallet(mnemonic, { interface: 'consumer-api' })
+    const wallet = new XecWallet(mnemonic, { interface: 'consumer-api' })
     await wallet.walletInfoPromise
     const p2wdbRead = new Read()
     const p2wdbWrite = new Write({ wif: wallet.walletInfo.privateKey, interface: 'consumer-api' })
