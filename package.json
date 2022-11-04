@@ -1,6 +1,6 @@
 {
   "name": "xec-dex-lib",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "An npm JavaScript library for browser and node.js that incorporates the SWaP protocol used by xec-dex.",
   "main": "index.js",
   "scripts": {
@@ -66,7 +66,7 @@
   "exports": {
     ".": {
       "import": {
-        "default": "./dist/bch-dex-lib.min.js"
+        "default": "./dist/xec-dex-lib.min.js"
       },
       "require": {
         "default": "index.js"
