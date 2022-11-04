@@ -6,7 +6,7 @@
 const assert = require('chai').assert
 const sinon = require('sinon')
 const cloneDeep = require('lodash.clonedeep')
-const BchWallet = require('minimal-slp-wallet')
+const BchWallet = require('minimal-ecash-wallet')
 const { Read } = require('p2wdb')
 
 // Mocking data libraries.
@@ -36,13 +36,13 @@ describe('#bch-dex-util.js', () => {
   afterEach(() => sandbox.restore())
 
   describe('#constructor', () => {
-    it('should throw error if instance of minimal-slp-wallet is not passed', () => {
+    it('should throw error if instance of minimal-ecash-wallet is not passed', () => {
       try {
         uut = new BchDexUtil({})
 
         assert.fail('Unexpected code path')
       } catch (err) {
-        assert.include(err.message, 'Instance of minimal-slp-wallet must be passed as wallet property when instantiating bch-dex-util library.')
+        assert.include(err.message, 'Instance of minimal-ecash-wallet must be passed as wallet property when instantiating xec-dex-util library.')
       }
     })
 
@@ -54,7 +54,7 @@ describe('#bch-dex-util.js', () => {
 
         assert.fail('Unexpected code path')
       } catch (err) {
-        assert.include(err.message, 'Instance of p2wdb Read must be passed as p2wdbRead property when instantiating bch-dex-util library.')
+        assert.include(err.message, 'Instance of p2wdb Read must be passed as p2wdbRead property when instantiating xec-dex-util library.')
       }
     })
   })
