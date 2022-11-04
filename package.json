@@ -10,7 +10,7 @@
     "lint": "standard --env mocha --fix",
     "docs": "./node_modules/.bin/apidoc -i src/ -o docs",
     "coverage:report": "nyc --reporter=html mocha test/unit/ --exit",
-    "build": "browserify index.js -p tinyify --s BchDexLib -o dist/bch-dex-lib.min.js"
+    "build": "browserify index.js -p tinyify --s XecDexLib -o dist/xec-dex-lib.min.js"
   },
   "keywords": [
     "bitcoin",

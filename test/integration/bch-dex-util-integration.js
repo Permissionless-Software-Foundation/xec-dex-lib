@@ -4,7 +4,7 @@
 
 // Global libraries
 const assert = require('chai').assert
-const BchWallet = require('minimal-slp-wallet/index')
+const BchWallet = require('minimal-ecash-wallet')
 const { Read } = require('p2wdb/index')
 
 // Unit under test

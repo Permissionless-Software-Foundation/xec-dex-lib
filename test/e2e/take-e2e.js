@@ -3,7 +3,7 @@
 */
 
 // Global npm libraries
-const BchWallet = require('minimal-slp-wallet/index')
+const BchWallet = require('minimal-ecash-wallet')
 const { Read, Write } = require('p2wdb/index')
 
 // Local libraries

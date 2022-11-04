@@ -6,7 +6,7 @@
 const assert = require('chai').assert
 const sinon = require('sinon')
 // const cloneDeep = require('lodash.clonedeep')
-const BchWallet = require('minimal-slp-wallet')
+const BchWallet = require('minimal-ecash-wallet')
 const { Write } = require('p2wdb')
 
 // Mocking data libraries.
@@ -41,13 +41,13 @@ describe('#flag.js', () => {
   afterEach(() => sandbox.restore())
 
   describe('#constructor', () => {
-    it('should throw error if instance of minimal-slp-wallet is not passed', () => {
+    it('should throw error if instance of minimal-ecash-wallet is not passed', () => {
       try {
         uut = new Flag({})
 
         assert.fail('Unexpected code path')
       } catch (err) {
-        assert.include(err.message, 'Instance of minimal-slp-wallet must be passed as wallet property when instantiating Flag library.')
+        assert.include(err.message, 'Instance of minimal-ecash-wallet must be passed as wallet property when instantiating Flag library.')
       }
     })
 

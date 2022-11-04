@@ -4,7 +4,7 @@
 
 // Global libraries
 const assert = require('chai').assert
-const BchWallet = require('minimal-slp-wallet')
+const BchWallet = require('minimal-ecash-wallet')
 
 // Unit under test
 const TokenData = require('../../lib/token-data.js')
