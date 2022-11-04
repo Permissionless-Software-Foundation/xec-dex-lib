@@ -1,0 +1,76 @@
+{
+  "name": "bch-dex-lib",
+  "version": "1.0.0",
+  "description": "An npm JavaScript library for browser and node.js that incorporates the SWaP protocol used by bch-dex.",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "test": "npm run lint && TEST=unit nyc mocha test/unit/",
+    "test:integration": "mocha --timeout 25000 test/integration/",
+    "lint": "standard --env mocha --fix",
+    "docs": "./node_modules/.bin/apidoc -i src/ -o docs",
+    "coverage:report": "nyc --reporter=html mocha test/unit/ --exit",
+    "build": "browserify index.js -p tinyify --s BchDexLib -o dist/bch-dex-lib.min.js"
+  },
+  "keywords": [
+    "bitcoin",
+    "bitcoin cash",
+    "wallet",
+    "javascript",
+    "cryptocurrency",
+    "react",
+    "front end",
+    "client",
+    "apidoc",
+    "slp",
+    "tokens"
+  ],
+  "author": "Chris Troutner <chris.troutner@gmail.com>",
+  "license": "MIT",
+  "apidoc": {
+    "title": "bch-dex-lib",
+    "url": "localhost:5000"
+  },
+  "repository": "Permissionless-Software-Foundation/bch-dex-lib",
+  "dependencies": {
+    "@chris.troutner/retry-queue-commonjs": "1.0.8"
+  },
+  "devDependencies": {
+    "apidoc": "0.52.0",
+    "browserify": "17.0.0",
+    "chai": "4.3.6",
+    "husky": "8.0.1",
+    "lodash.clonedeep": "4.5.0",
+    "minimal-slp-wallet": "5.4.3",
+    "mocha": "10.0.0",
+    "nyc": "15.1.0",
+    "p2wdb": "2.2.7",
+    "semantic-release": "19.0.5",
+    "sinon": "14.0.0",
+    "standard": "17.0.0",
+    "tinyify": "3.0.0"
+  },
+  "release": {
+    "publish": [
+      {
+        "path": "@semantic-release/npm",
+        "npmPublish": true
+      }
+    ]
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "npm run lint && npm run build"
+    }
+  },
+  "exports": {
+    ".": {
+      "import": {
+        "default": "./dist/bch-dex-lib.min.js"
+      },
+      "require": {
+        "default": "index.js"
+      }
+    }
+  }
+}
